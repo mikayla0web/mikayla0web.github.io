@@ -213,9 +213,11 @@
 
                 // Happy Triggers
                 const happyTriggers = [
-                    "totally worth the risk", "nectar was delicious", "extra ration of food",
-                    "salutes the drone for its loyalty", "thankful for the help", "good timing!",
-                    "stayed hidden and found some stashed jellies"
+                    "totally worth the risk", "nectar was delicious", "extra ration of food", 
+                    "stayed inside the hive", "salutes the drone for its loyalty", 
+                    "good thing this drone didn't respond", "thankful for the help", 
+                    "fed the hungry larvae", "self-control might have saved", "good timing!",
+                    "decided to relax today", "stayed hidden and found some stashed jellies"
                 ];
                 for (const trigger of happyTriggers) {
                     if (resultLower.includes(trigger)) {
@@ -225,12 +227,10 @@
                 }
                 // Sad Triggers (Survived, but neutral or slightly negative outcome)
                 const sadTriggers = [
-                    "resisted temptation", "maybe another time", "missed the meeting",
-                    "some brave bees were lost", "good choice!", "fed the hungry larvae",
-                    "drones were evicted", "tough but necessary", "self-control might have saved",
-                    "best never to bother", "decided to relax today", "stayed inside the hive",
-                    "good thing this drone didn't respond", "couldn't bring itself to do it",
-                    "food became even scarcer"
+                    "resisted temptation", "missed the meeting",
+                    "some brave bees were lost", "good choice!",
+                    "drones were evicted", "best never to bother", 
+                    "couldn't bring itself to do it", "food became even scarcer"
                 ];
                  for (const trigger of sadTriggers) {
                     if (resultLower.includes(trigger)) {
