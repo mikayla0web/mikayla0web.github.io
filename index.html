@@ -53,19 +53,29 @@
         }
         .main-image {
             width: 100%;
-            max-width: 400px;
-            height: auto;
+            max-width: 400px; /* Max width for the main game image */
+            height: 300px; /* Fixed height for consistency */
             border-radius: 0.5rem;
             margin-bottom: 1rem;
-            object-fit: cover;
+            object-fit: cover; /* Ensures the image covers the area, cropping if necessary */
+            background-color: #e5e7eb; /* A light gray background for the image area */
         }
+         .start-screen-logo {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 0.5rem; /* Or rounded-full if you prefer */
+            margin-bottom: 1.5rem; /* Corresponds to mb-6 */
+            background-color: #e5e7eb;
+         }
          .end-screen-image {
             width: 100%;
             max-width: 200px;
-            height: auto;
+            height: 200px; /* Fixed height */
             border-radius: 0.5rem;
-            margin: 1rem 0;
+            margin: 1rem auto; /* Centering and margin */
             object-fit: cover;
+            background-color: #e5e7eb;
         }
     </style>
 </head>
@@ -73,11 +83,14 @@
 
     <div id="start-screen" class="screen active-screen bg-yellow-100">
         <div class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full">
-            <img src="/workspaces/mikayla0web.github.io/main/resources/edu/miracosta/cs112/finalproject/finalproject/startScreen.png" alt="Bee Game Logo" class="mx-auto mb-6 rounded-full">
+            <img id="start-screen-logo-img" src="https://mikayla0web.github.io/images/startScreen.png" 
+                 alt="Bee Game Logo" 
+                 class="mx-auto start-screen-logo"
+                 onerror="this.onerror=null; this.src='https://placehold.co/150x150/cccccc/969696?text=Image+Not+Found';">
             <h1 id="start-title" class="text-4xl font-bold text-yellow-700 mb-4">Welcome to: <br>To Bee Or Not To Bee!</h1>
             <p id="start-instructions" class="text-lg text-yellow-800 mb-8">Can you learn to survive in the hive? <br>Choose which role you would like to bee below!</p>
             <div class="flex flex-col sm:flex-row justify-center">
-                <button id="drone-bee-button" class="button">Drone Bee</button>,
+                <button id="drone-bee-button" class="button">Drone Bee</button>
                 <button id="worker-bee-button" class="button">Worker Bee</button>
                 <button id="queen-bee-button" class="button">Queen Bee</button>
             </div>
@@ -92,7 +105,9 @@
             </div>
 
             <div class="flex flex-col items-center order-1 md:order-2">
-                <img id="main-screen-image" src="https://placehold.co/400x300/FBBF24/1E293B?text=The+Hive" alt="Game Scene" class="main-image shadow-lg">
+                <img id="main-screen-image" src="https://mikayla0web.github.io/images/worker.jpg" alt="Game Scene" 
+                     class="main-image shadow-lg"
+                     onerror="this.onerror=null; this.src='https://placehold.co/400x300/cccccc/969696?text=Image+Not+Found';">
                 <div class="info-box bg-lime-50 border-lime-200 w-full">
                     <h2 class="text-xl font-semibold text-lime-700 mb-2">Current Event</h2>
                     <p id="event-text-field" class="text-lime-800 min-h-[6em]"></p>
@@ -115,8 +130,10 @@
     </div>
 
     <div id="end-screen" class="screen bg-blue-100">
-        <div class="bg-white p-8 rounded-lg shadow-xl max-w-lg w-full">
-            <img id="end-screen-bee-image" src="https://placehold.co/150x150/FACC15/422006?text=Bee" alt="Bee Outcome" class="mx-auto mb-4 rounded-lg end-screen-image">
+        <div class="bg-white p-8 rounded-lg shadow-xl max-w-lg w-full relative">
+            <img id="end-screen-bee-image" src="https://mikayla0web.github.io/images/workerEnd.jpeg" alt="Bee Outcome" 
+                 class="mx-auto end-screen-image"
+                 onerror="this.onerror=null; this.src='https://placehold.co/200x200/cccccc/969696?text=Image+Not+Found';">
             <h1 id="end-title-text-field" class="text-3xl font-bold text-blue-700 mb-4">Game Over</h1>
             <div class="info-box bg-blue-50 border-blue-200">
                 <p id="end-summary-text-area" class="text-blue-800 text-lg"></p>
@@ -132,6 +149,7 @@
         const endScreen = document.getElementById('end-screen');
 
         // Start Screen Elements
+        const startScreenLogoImg = document.getElementById('start-screen-logo-img');
         const droneBeeButton = document.getElementById('drone-bee-button');
         const workerBeeButton = document.getElementById('worker-bee-button');
         const queenBeeButton = document.getElementById('queen-bee-button');
@@ -154,7 +172,10 @@
         // --- Game State Variables ---
         let currentBee = null;
         let currentEventText = '';
-        let eventHandled = true; // Initially true, waiting for first "YES" to start events
+        let eventHandled = true; 
+
+        // --- Image Base URL ---
+        const IMAGE_BASE_URL = "https://mikayla0web.github.io/images/"; // Assuming your repo is mikayla0web.github.io
 
         // --- Constants (from Java Constants.java) ---
         const BEE_CONSTANTS = {
@@ -166,10 +187,10 @@
         // --- Bee Classes (from Java Bee.java and subclasses) ---
         class Bee {
             constructor(name, size, gender, role, color, tasks) {
-                this.name = name; // This was role name in Java, let's keep it for consistency
+                this.name = name; 
                 this.sizeInCm = size;
                 this.gender = gender;
-                this.role = role; // 'drone', 'worker', 'queen'
+                this.role = role; 
                 this.eventCount = 0;
                 this.lastEventResult = "";
                 this.color = color;
@@ -177,10 +198,10 @@
             }
             incrementEventCount() { this.eventCount++; }
             getEventCount() { return this.eventCount; }
-            hasReachedLifespan() { return this.eventCount >= 7; } // Max 7 events based on Java logic
-            getType() { return this.role; } // Simplified
+            hasReachedLifespan() { return this.eventCount >= 7; } 
+            getType() { return this.role; } 
             toString() { return `Bee Role: ${this.name}\nSize: ${this.sizeInCm} cm\nGender: ${this.gender}`; }
-            stats() { return `Expected Life Span: ${this.getLifeSpan()} days\nPrimary color: ${this.color}\nUsual Tasks: ${this.tasks}`; }
+            stats() { return `Events Survived: ${this.getEventCount()} / 7\nPrimary color: ${this.color}\nUsual Tasks: ${this.tasks}`; }
             setLastEventResult(result) {
                 this.lastEventResult = result;
                 this.incrementEventCount();
@@ -205,7 +226,7 @@
 
         // --- Actions and Events Logic (from Java ActionsAndEvents.java) ---
         const actionsAndEventsLogic = {
-            eventCollections: {
+            eventCollections: { /* Same as before */
                 worker: [
                     "There is a pretty flower in the window, would you like to get a closer look?",
                     "The nectar looks very tempting, would you like to sneak a little taste?",
@@ -235,27 +256,26 @@
                 ]
             },
             availableEvents: {},
-            currentEventInternal: '', // Renamed to avoid conflict with global currentEventText
+            currentEventInternal: '', 
 
-            _shuffleArray(array) {
+            _shuffleArray(array) { /* Same as before */
                 for (let i = array.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [array[i], array[j]] = [array[j], array[i]];
                 }
             },
 
-            initAvailableEvents() {
-                this.availableEvents = {}; // Reset for new game
+            initAvailableEvents() { /* Same as before */
+                this.availableEvents = {}; 
                 for (const beeType in this.eventCollections) {
                     this.availableEvents[beeType] = [...this.eventCollections[beeType]];
                     this._shuffleArray(this.availableEvents[beeType]);
                 }
             },
 
-            generateEvent(beeType) {
+            generateEvent(beeType) { /* Same as before */
                 const type = beeType.toLowerCase();
                 if (!this.availableEvents[type] || this.availableEvents[type].length === 0) {
-                    // Refill and reshuffle if empty
                     this.availableEvents[type] = [...this.eventCollections[type]];
                     this._shuffleArray(this.availableEvents[type]);
                     if (this.availableEvents[type].length === 0) return "The hive is quiet. No new events for now.";
@@ -264,9 +284,8 @@
                 return this.currentEventInternal;
             },
 
-            handleEvent(beeType, userChoice, eventText) {
+            handleEvent(beeType, userChoice, eventText) { /* Same as before */
                 const type = beeType.toLowerCase();
-                // Logic from Java ActionsAndEvents.java handleWorkerBeeEvent, handleDroneBeeEvent, handleQueenBeeEvent
                 switch (type) {
                     case "worker":
                         switch (eventText) {
@@ -275,15 +294,15 @@
                             case "The nectar looks very tempting, would you like to sneak a little taste?":
                                 return userChoice ? "Totally worth the risk." : "Maybe one day.";
                             case "The queen has requested all worker bees to the royal room, would you like to attend?":
-                                return "She gave everybody in attendance an extra ration of food!"; // No choice impact in original
+                                return "She gave everybody in attendance an extra ration of food!"; 
                             case "A bear paw is attacking the hive! Would you like to attack?":
                                 return userChoice ? "Game over. You stung the bear and saved the hive! Unfortunately, your stinger has been ripped from your body." : "The bear was defeated but we lost a lot of friends during the fight.";
                             case "The sky is looking a bit cloudy... do you still want to go to work?":
                                 return userChoice ? "Game over. A raindrop shot you down!" : "Good choice! The rain took down some bees today.";
                             case "The larvae are looking a little hungry, would you like to feed them royal jelly?":
-                                return "I wonder what royal jelly tastes like."; // No choice impact
+                                return "I wonder what royal jelly tastes like."; 
                             case "Winter is approaching and food is scarce, would you like to kick the drones out of the hive?":
-                                return "It was for the better."; // No choice impact
+                                return "It was for the better."; 
                             default: return "Unknown Worker Event outcome.";
                         }
                     case "drone":
@@ -307,19 +326,19 @@
                     case "queen":
                         switch (eventText) {
                             case "Laying eggs is a lot of work, would you like to ask your servant for a drink?":
-                                return userChoice ? "Game over. The servant poisoned you!" : "They probably poisoned it anyways.";
+                                return userChoice  ? "Game over. The servant poisoned you!" : "They probably poisoned it anyways.";
                             case "The nectar looks very tempting, would you like to sneak a little taste?":
-                                return "Silly bee! You're queen, you never have to 'sneak a taste'."; // No choice impact
+                                return "Silly bee! You're queen, you never have to 'sneak a taste'."; 
                             case "The weather is beautiful today! Would you like to announce a day off to the bees?":
-                                return userChoice ? "The bees are thankful for your kindness." : "This honey is not gonna make itself!";
+                                return userChoice ? "The bees are thankful for your kindness.": "This honey is not gonna make itself!";
                             case "A drone bee asked for extra food rations this week, would you like to punish him?":
-                                return "Being a queen is all about the tough decisions."; // No choice impact
+                                return "Being a queen is all about the tough decisions."; 
                             case "A bear is attacking the hive! Do you want to assemble the worker bees to attack?":
-                                return userChoice ? "We lost many workers along the way, but at least the hive is safe." : "Game over. Everyone perished.";
+                                return userChoice ? "We lost many workers along the way, but at least the hive is safe.": "Game over. Everyone perished.";
                             case "Winter is approaching and food is scarce, would you like to kick the drones out of the hive?":
                                 return userChoice ? "They will be missed." : "Game over. The hive starved to death.";
                             case "The bees are getting worried for the queen, would you like to make a public appearance to reassure your subjects?":
-                                return userChoice ? "Your subjects were pleased to see you." : "Game over! Your subjects revolted.";
+                                return userChoice ? " Your subjects were pleased to see you.": "Game over! Your subjects revolted.";
                             default: return "Unknown Queen Event outcome.";
                         }
                     default: return "Unknown Bee Type for event handling.";
@@ -328,7 +347,7 @@
         };
 
         // --- Screen Management ---
-        function showScreen(screenId) {
+        function showScreen(screenId) { /* Same as before */
             startScreen.classList.remove('active-screen');
             gameScreen.classList.remove('active-screen');
             endScreen.classList.remove('active-screen');
@@ -337,28 +356,32 @@
 
         // --- Image Update Logic ---
         function updateMainScreenImage(eventText, resultText) {
-            let imageNameHint = currentBee.role; // Default to bee type
+            let imageName = `${currentBee.role}.jpg`; // Default image for the bee type
             const eventLower = eventText.toLowerCase();
             const resultLower = resultText.toLowerCase();
 
             if (resultLower.includes("game over")) {
-                imageNameHint = `${currentBee.role} Game Over`;
-            } else if (resultText && !resultLower.includes("game over")) { // Result shown, but not game over
-                 imageNameHint = `${currentBee.role} Ponders`; // Default image after an action
-            } else { // New event is shown
-                if (eventLower.includes("flower")) imageNameHint = "Flower Scene";
-                else if (eventLower.includes("nectar")) imageNameHint = "Sneaking Honey";
-                else if (eventLower.includes("requested") || eventLower.includes("subjects")) imageNameHint = "Royal Court";
-                else if (eventLower.includes("bear")) imageNameHint = "Bear Attack";
-                else if (eventLower.includes("cloudy") || eventLower.includes("rain")) imageNameHint = "Stormy Weather";
-                else if (eventLower.includes("larvae") || eventLower.includes("snack")) imageNameHint = "Royal Jelly Time";
-                else if (eventLower.includes("winter") || eventLower.includes("scarce")) imageNameHint = "Winter is Coming";
-                else if (eventLower.includes("declared") || eventLower.includes("beautiful")) imageNameHint = "Sunny Day";
-                else if (eventLower.includes("rations")) imageNameHint = "Sad Drone";
-                else if (eventLower.includes("drink")) imageNameHint = "A Drink for the Queen";
+                // Assuming end images are JPEGs as per Java EndViewController
+                imageName = `${currentBee.role}End.jpeg`; 
+            } else if (resultText && !resultLower.includes("game over")) {
+                 // Keep current bee image or a generic "pondering" image if you have one
+                 imageName = `${currentBee.role}.jpg`; // Or e.g., `${currentBee.role}Ponders.jpg`
+            } else { // New event is shown, pick image based on event
+                if (eventLower.includes("flower")) imageName = "flowers.jpg";
+                else if (eventLower.includes("nectar")) imageName = "sneakingHoney.png";
+                else if (eventLower.includes("requested") || eventLower.includes("subjects")) imageName = "uneasySubjects.png";
+                else if (eventLower.includes("bear")) imageName = "bear.jpg";
+                else if (eventLower.includes("cloudy") || eventLower.includes("rain")) imageName = "stormy.jpg";
+                else if (eventLower.includes("larvae") || eventLower.includes("snack")) imageName = "royalJelly.png";
+                else if (eventLower.includes("winter") || eventLower.includes("scarce")) imageName = "snow.jpg";
+                else if (eventLower.includes("declared") || eventLower.includes("beautiful")) imageName = "sunny.jpg";
+                else if (eventLower.includes("rations")) imageName = "sadDrone.png";
+                else if (eventLower.includes("drink")) imageName = "drink.jpg";
+                // Default to bee's main image if no specific event image matches
+                else imageName = `${currentBee.role}.jpg`;
             }
-            mainScreenImage.src = `https://placehold.co/400x300/FBBF24/1E293B?text=${encodeURIComponent(imageNameHint)}`;
-            mainScreenImage.alt = imageNameHint;
+            mainScreenImage.src = IMAGE_BASE_URL + imageName;
+            mainScreenImage.alt = eventText || currentBee.role; // Alt text
         }
 
 
@@ -376,11 +399,13 @@
             eventTextField.textContent = `Welcome to the hive, ${currentBee.name}!\nLearn from your mistakes and adapt.\nClick YES to start working!`;
             resultTextField.textContent = "";
             
-            updateMainScreenImage(currentBee.role, ""); // Default image for bee type
+            // Set initial image for the selected bee type
+            mainScreenImage.src = IMAGE_BASE_URL + `${currentBee.role}.jpg`;
+            mainScreenImage.alt = currentBee.name;
             
             yesButton.disabled = false;
             noButton.disabled = true;
-            eventHandled = true; // Ready for the first "YES" to trigger the first event
+            eventHandled = true; 
             
             showScreen('game-screen');
         }
@@ -388,14 +413,14 @@
         function handlePlayerChoice(isYesChoice) {
             if (!currentBee) return;
 
-            if (eventHandled) { // This means player clicked YES to get a new event (or first event)
+            if (eventHandled) { 
                 currentEventText = actionsAndEventsLogic.generateEvent(currentBee.role);
                 eventTextField.textContent = currentEventText;
                 resultTextField.textContent = "";
                 updateMainScreenImage(currentEventText, "");
                 eventHandled = false;
-                noButton.disabled = false; // Enable NO for the actual event choice
-            } else { // Player is responding to an event
+                noButton.disabled = false; 
+            } else { 
                 const result = actionsAndEventsLogic.handleEvent(currentBee.role, isYesChoice, currentEventText);
                 resultTextField.textContent = result;
                 currentBee.setLastEventResult(result);
@@ -405,45 +430,43 @@
                     displayEndScreen();
                 } else {
                     eventHandled = true;
-                    noButton.disabled = true; // Disable NO until next event
+                    noButton.disabled = true; 
                     eventTextField.textContent = "Press YES to continue to the next event.";
                 }
             }
-            // Update bee stats display after each event
-            beeInfoLeft.textContent = currentBee.toString(); // Potentially update if stats change
-            beeInfoRight.textContent = currentBee.stats();  // eventCount changes here
+            beeInfoLeft.textContent = currentBee.toString(); 
+            beeInfoRight.textContent = currentBee.stats();  
         }
 
         function displayEndScreen() {
             let title = `Your life as a ${currentBee.name.toLowerCase()} has ended.`;
             let summary = currentBee.lastEventResult;
-            let imageNameHint = `${currentBee.role} End`;
+            let beeImageFile = `${currentBee.role}End.jpeg`; // Default end image (assuming .jpeg)
 
             if (!summary.toLowerCase().includes("game over") && currentBee.hasReachedLifespan()) {
                 title = `Congratulations ${currentBee.name.toLowerCase()}, you adapted and survived!`;
                 summary = `This ${currentBee.name.toLowerCase()} has successfully completed its journey after ${currentBee.getEventCount()} events and left a buzzing legacy!`;
-                imageNameHint = `${currentBee.role} Survived`;
-            } else if (!summary) { // Fallback if somehow lastEventResult is empty
+                beeImageFile = `${currentBee.role}Survived.png`; // Survived image (assuming .png)
+            } else if (!summary) { 
                  summary = "The bee's journey has ended unexpectedly. Learn from your mistakes and try again!";
             }
             
             if (summary.toLowerCase().includes("game over") && !summary.toLowerCase().startsWith("game over")) {
-                 summary = "Game over. " + summary; // Ensure "Game over" is prominent
+                 summary = "Game over. " + summary; 
             }
-
 
             endTitleTextField.textContent = title;
             endSummaryTextArea.textContent = summary;
-            endScreenBeeImage.src = `https://placehold.co/150x150/FACC15/422006?text=${encodeURIComponent(imageNameHint)}`;
-            endScreenBeeImage.alt = imageNameHint;
+            endScreenBeeImage.src = IMAGE_BASE_URL + beeImageFile;
+            endScreenBeeImage.alt = title;
             showScreen('end-screen');
         }
 
-        function restartGame() {
+        function restartGame() { /* Same as before */
             currentBee = null;
             currentEventText = '';
             eventHandled = true;
-            // actionsAndEventsLogic.availableEvents will be reset by initAvailableEvents
+            startScreenLogoImg.src = IMAGE_BASE_URL + "startScreen.png"; // Reset start screen image
             showScreen('start-screen');
         }
 
@@ -458,9 +481,10 @@
         restartButton.addEventListener('click', restartGame);
 
         // --- Initial Setup ---
-        showScreen('start-screen'); // Show start screen on page load
+        // Set the initial start screen logo image
+        startScreenLogoImg.src = IMAGE_BASE_URL + "startScreen.png";
+        showScreen('start-screen'); 
 
     </script>
 </body>
 </html>
-
