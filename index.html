@@ -436,7 +436,7 @@
 
         function displayEndScreen() {
             let title = `Your life as a ${currentBee.name.toLowerCase()} has ended.`;
-            let summary = currentBee.lastEventResult;
+            let summary = currentBee.lastEventResult + "  Learn from your mistakes and try again!";
             let beeImageFile = `${currentBee.role.toLowerCase()}beeEnd.jpeg`; 
 
             if (!summary.toLowerCase().includes("game over") && currentBee.hasReachedLifespan()) {
