@@ -34,17 +34,23 @@
             border: 1px solid #fde68a; /* yellow-200 */
             padding: 1rem;
             border-radius: 0.5rem;
-            margin: 0.5rem 0; /* Adjusted margin for new layout */
-            width: 100%; /* Ensure info boxes take full width in their container */
-            white-space: pre-line; /* To respect \n in text */
+            margin-bottom: 1rem; /* Common margin */
+            width: 100%; 
+            white-space: pre-line; 
+            text-align: left; /* Align text left in info boxes */
         }
-        .main-image-large { /* For the larger game image */
-            width: 100%;
-            max-width: 500px; /* Increased max-width */
-            height: 350px;    /* Increased height */
+        .main-image-layout {
+            width: 100%; /* Full width on small screens */
+            height: auto;
+            min-height: 200px; /* Min height for small screens */
+            max-height: 350px; /* Max height for larger screens */
             border-radius: 0.5rem;
             object-fit: cover; 
-            background-color: #e5e7eb; 
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .main-image-layout {
+                min-height: 300px; /* Taller on larger screens */
+            }
         }
          .start-screen-logo {
             width: 150px;
@@ -52,7 +58,6 @@
             object-fit: cover;
             border-radius: 0.5rem; 
             margin-bottom: 1.5rem; 
-            background-color: #e5e7eb;
          }
          .end-screen-image {
             width: 100%;
@@ -61,7 +66,6 @@
             border-radius: 0.5rem;
             margin: 1rem auto; 
             object-fit: cover;
-            background-color: #e5e7eb;
         }
     </style>
 </head>
@@ -84,24 +88,30 @@
     </div>
 
     <div id="game-screen" class="screen bg-green-100">
-        <div class="flex flex-col items-center w-full max-w-4xl p-2 md:p-4"> <img id="main-screen-image" src="https://mikayla0web.github.io/images/worker.jpg" alt="Game Scene" 
-                 class="main-image-large shadow-lg mb-4"
-                 onerror="this.onerror=null; this.src='https://placehold.co/500x350/cccccc/969696?text=Image+Not+Found';">
+        <div class="flex flex-col items-center w-full max-w-4xl p-2 md:p-4"> 
+            <div class="flex flex-col md:flex-row gap-4 w-full mb-4 items-stretch md:items-start"> 
+                <div class="md:w-2/3 w-full">
+                    <img id="main-screen-image" src="https://mikayla0web.github.io/images/worker.jpg" alt="Game Scene" 
+                         class="main-image-layout shadow-lg">
+                </div>
+                <div class="info-box bg-yellow-50 border-yellow-200 md:w-1/3 w-full">
+                    <h2 class="text-xl font-semibold text-yellow-700 mb-2 text-center md:text-left">Bee Details & Stats</h2>
+                    <p id="bee-stats-full" class="text-yellow-800"></p>
+                </div>
+            </div>
 
             <div class="flex flex-col md:flex-row gap-4 w-full mb-4">
-                <div class="info-box bg-lime-50 border-lime-200 flex-1"> <h2 class="text-xl font-semibold text-lime-700 mb-2">Current Event</h2>
-                    <p id="event-text-field" class="text-lime-800 min-h-[6em]"></p>
+                <div class="info-box bg-lime-50 border-lime-200 flex-1"> 
+                    <h2 class="text-xl font-semibold text-lime-700 mb-2">Current Event</h2>
+                    <p id="event-text-field" class="text-lime-800 min-h-[5em]"></p>
                 </div>
-                <div class="info-box bg-orange-50 border-orange-200 flex-1"> <h2 class="text-xl font-semibold text-orange-700 mb-2">Result</h2>
-                    <p id="result-text-field" class="text-orange-800 min-h-[6em]"></p> </div>
+                <div class="info-box bg-orange-50 border-orange-200 flex-1"> 
+                    <h2 class="text-xl font-semibold text-orange-700 mb-2">Result</h2>
+                    <p id="result-text-field" class="text-orange-800 min-h-[5em]"></p> 
+                </div>
             </div>
 
-            <div class="info-box bg-yellow-50 border-yellow-200 w-full mb-6">
-                <h2 class="text-xl font-semibold text-yellow-700 mb-2">Bee Details & Stats</h2>
-                <p id="bee-stats-full" class="text-yellow-800"></p>
-            </div>
-
-            <div class="mt-2">
+            <div class="mt-2 text-center">
                 <button id="action-button" class="button bg-blue-500 hover:bg-blue-600 border-blue-600 text-white">Let's Bee-gin!</button>
                 <button id="yes-button" class="button bg-green-500 hover:bg-green-600 border-green-600 text-white" style="display: none;">YES</button>
                 <button id="no-button" class="button bg-red-500 hover:bg-red-600 border-red-600 text-white" style="display: none;">NO</button>
@@ -109,7 +119,7 @@
         </div>
     </div>
 
-    <div id="end-screen" class="screen bg-blue-100">
+    <div id="end-screen" class="screen bg-blue-100"> 
         <div class="bg-white p-8 rounded-lg shadow-xl max-w-lg w-full relative">
             <img id="end-screen-bee-image" src="https://mikayla0web.github.io/images/workerEnd.jpeg" alt="Bee Outcome" 
                  class="mx-auto end-screen-image"
@@ -136,10 +146,10 @@
 
         // Game Screen Elements
         const mainScreenImage = document.getElementById('main-screen-image');
-        const beeStatsFull = document.getElementById('bee-stats-full'); // Consolidated stats display
+        const beeStatsFull = document.getElementById('bee-stats-full'); 
         const eventTextField = document.getElementById('event-text-field');
         const resultTextField = document.getElementById('result-text-field');
-        const actionButton = document.getElementById('action-button'); // New main action button
+        const actionButton = document.getElementById('action-button'); 
         const yesButton = document.getElementById('yes-button');
         const noButton = document.getElementById('no-button');
 
@@ -152,9 +162,6 @@
         // --- Game State Variables ---
         let currentBee = null;
         let currentEventText = '';
-        // eventHandled: 
-        // true = waiting for user to click "Let's Bee-gin!" or "Continue..." to get a new event.
-        // false = event is displayed, waiting for user to click "YES" or "NO".
         let eventHandled = true; 
 
         // --- Image Base URL ---
@@ -183,7 +190,6 @@
             getEventCount() { return this.eventCount; }
             hasReachedLifespan() { return this.eventCount >= 7; } 
             getType() { return this.role; } 
-            // Consolidated stats method
             fullStats() { 
                 return `Bee Role: ${this.name}\nSize: ${this.sizeInCm} cm\nGender: ${this.gender}\nEvents Survived: ${this.getEventCount()} / 7\nPrimary color: ${this.color}\nUsual Tasks: ${this.tasks}`; 
             }
@@ -371,7 +377,7 @@
         }
 
         function displayGameScreenAndInitialEvent() {
-            beeStatsFull.textContent = currentBee.fullStats(); // Update consolidated stats
+            beeStatsFull.textContent = currentBee.fullStats(); 
             
             eventTextField.textContent = `Welcome to the hive, ${currentBee.name}!\nLearn from your mistakes and adapt.\nClick "Let's Bee-gin!" to start your journey.`;
             resultTextField.textContent = "";
@@ -389,46 +395,41 @@
             showScreen('game-screen');
         }
         
-        // Combined handler for "Let's Bee-gin!" and "Continue..."
         function handleActionClick() {
             if (!currentBee) return;
 
-            if (eventHandled) { // True if it's "Let's Bee-gin!" or "Continue..."
+            if (eventHandled) { 
                 currentEventText = actionsAndEventsLogic.generateEvent(currentBee.role);
                 eventTextField.textContent = currentEventText;
-                resultTextField.textContent = ""; // Clear previous result
+                resultTextField.textContent = ""; 
                 updateMainScreenImage(currentEventText, "");
                 
                 actionButton.style.display = 'none';
                 yesButton.style.display = 'inline-block';
                 noButton.style.display = 'inline-block';
                 
-                eventHandled = false; // Now waiting for YES/NO response
+                eventHandled = false; 
             }
-            // This button should not do anything if eventHandled is false (i.e., YES/NO are visible)
         }
 
-        // Handler for YES/NO choices
         function handleChoice(isYesChoice) {
-            if (!currentBee || eventHandled) return; // Should only run when event is active
+            if (!currentBee || eventHandled) return; 
 
             const result = actionsAndEventsLogic.handleEvent(currentBee.role, isYesChoice, currentEventText);
             resultTextField.textContent = result;
             currentBee.setLastEventResult(result);
-            updateMainScreenImage(currentEventText, result); // Update image based on event and result
+            updateMainScreenImage(currentEventText, result); 
 
-            beeStatsFull.textContent = currentBee.fullStats(); // Update stats after event
+            beeStatsFull.textContent = currentBee.fullStats(); 
 
             if (currentBee.hasReachedLifespan() || result.toLowerCase().includes("game over")) {
                 displayEndScreen();
             } else {
-                eventHandled = true; // Ready for "Continue..."
+                eventHandled = true; 
                 yesButton.style.display = 'none';
                 noButton.style.display = 'none';
                 actionButton.textContent = "Continue...";
                 actionButton.style.display = 'inline-block';
-                // Keep eventTextField showing the event that led to the result
-                // Keep resultTextField showing the result
             }
         }
 
@@ -436,12 +437,13 @@
         function displayEndScreen() {
             let title = `Your life as a ${currentBee.name.toLowerCase()} has ended.`;
             let summary = currentBee.lastEventResult;
-            let beeImageFile = `${currentBee.role}End.jpeg`; 
+            // Default to .jpeg for end, .png for survived, based on original Java naming pattern
+            let beeImageFile = `${currentBee.role.toLowerCase()}End.jpeg`; 
 
             if (!summary.toLowerCase().includes("game over") && currentBee.hasReachedLifespan()) {
                 title = `Congratulations ${currentBee.name.toLowerCase()}, you adapted and survived!`;
                 summary = `This ${currentBee.name.toLowerCase()} has successfully completed its journey after ${currentBee.getEventCount()} events and left a buzzing legacy!`;
-                beeImageFile = `${currentBee.role}Survived.png`; 
+                beeImageFile = `${currentBee.role.toLowerCase()}Survived.png`; 
             } else if (!summary) { 
                  summary = "The bee's journey has ended unexpectedly. Learn from your mistakes and try again!";
             }
@@ -452,6 +454,7 @@
 
             endTitleTextField.textContent = title;
             endSummaryTextArea.textContent = summary;
+            console.log("Attempting to load end screen image:", IMAGE_BASE_URL + beeImageFile); // Debugging line
             endScreenBeeImage.src = IMAGE_BASE_URL + beeImageFile;
             endScreenBeeImage.alt = title;
             showScreen('end-screen');
@@ -470,7 +473,7 @@
         workerBeeButton.addEventListener('click', () => selectBeeType(WorkerBee));
         queenBeeButton.addEventListener('click', () => selectBeeType(QueenBee));
 
-        actionButton.addEventListener('click', handleActionClick); // For "Let's Bee-gin!" and "Continue..."
+        actionButton.addEventListener('click', handleActionClick); 
         yesButton.addEventListener('click', () => handleChoice(true));
         noButton.addEventListener('click', () => handleChoice(false));
 
