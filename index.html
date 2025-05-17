@@ -203,7 +203,7 @@
                 this.name = BEE_CONSTANTS[role.toUpperCase()].NAME;
                 this.eventCount = 0;
                 this.lastEventResult = "";
-                this.currentImageFile = `${this.role.toLowerCase()}Neutral.jpg`; // Default, ensure .jpg or .png
+                this.currentImageFile = `${this.role.toLowerCase()}Neutral.png`;
             }
             incrementEventCount() { this.eventCount++; }
             getEventCount() { return this.eventCount; }
@@ -228,20 +228,20 @@
                     (eventLower.includes("wink at her") && resultLower.includes("queen has you executed")) ||
                     (eventLower.includes("surrounding the drone room") && resultLower.includes("annual winter eviction")) ||
                     (eventLower.includes("pollen all over the floor") && !userChoice && type === "drone" && resultLower.includes("executed the drone for not being a productive"))) { // Specific drone NO choice death
-                    return `${prefix}${beeType}Dead.jpg`; // Assuming Dead images are .jpg based on upload
+                    return `${prefix}${beeType}Dead.png`;
                 }
 
                 // Happy conditions (Survived this event positively)
                 if (resultLower.includes("worth the risk") || resultLower.includes("extra ration of food") ||
                     resultLower.includes("salutes the drone for its loyalty") || resultLower.includes("thankful for the help") ||
                     resultLower.includes("good timing!")) {
-                    return `${prefix}${beeType}Happy.jpg`; // Assuming Happy images are .jpg
+                    return `${prefix}${beeType}Happy.png`; 
                 }
 
                 // Sad/Neutral conditions (Survived, but not explicitly happy or died)
                 // Specific for flower event NO choice (survived)
                 if (eventLower.includes("pretty flower") && resultLower.includes("wisely stayed away")) {
-                     return `${prefix}${beeType}Sad.jpg`; // Or Neutral
+                     return `${prefix}${beeType}Sad.png`; // Or Neutral
                 }
                 if (resultLower.includes("maybe another time") || resultLower.includes("missed the meeting") ||
                     resultLower.includes("some brave bees were lost") || resultLower.includes("good choice!") ||
@@ -249,9 +249,9 @@
                     resultLower.includes("self-control might have saved") || resultLower.includes("best never to bother") ||
                     resultLower.includes("decided to relax today") || resultLower.includes("stayed inside the hive") ||
                     resultLower.includes("good thing the drone didn't respond")) {
-                    return `${prefix}${beeType}Sad.jpg`;
+                    return `${prefix}${beeType}Sad.png`;
                 }
-                return `${prefix}${beeType}Neutral.jpg`; // Fallback
+                return `${prefix}${beeType}Neutral.png`; // Fallback
             }
         }
 
@@ -381,8 +381,8 @@
             currentPlayerBee.eventCount = 0; // Reset event count for new game
             currentModelBee.eventCount = 0;
             eventTracker.textContent = `Event: ${currentPlayerBee.getEventCount() + 1} / ${MAX_EVENTS}`;
-            playerBeeImage.src = IMAGE_BASE_URL + currentPlayerBee.role.toLowerCase() + "Neutral.jpg"; // Use .jpg for neutral
-            modelBeeImage.src = IMAGE_BASE_URL + "other" + currentModelBee.role.toLowerCase() + "Neutral.jpg";
+            playerBeeImage.src = IMAGE_BASE_URL + currentPlayerBee.role.toLowerCase() + "Neutral.png"; // Use .jpg for neutral
+            modelBeeImage.src = IMAGE_BASE_URL + "other" + currentModelBee.role.toLowerCase() + "Neutral.png";
 
             eventTextField.textContent = `Welcome to the hive, ${currentPlayerBee.name}!\nObserve other bees and learn from their choices to survive.\nClick "Let's Bee-gin!" to see your first event.`;
             playerResultTextField.textContent = "";
@@ -416,8 +416,8 @@
                 currentEventText = actionsAndEventsLogic.generateEvent(currentPlayerBee.role);
                 eventTextField.textContent = currentEventText;
 
-                playerBeeImage.src = IMAGE_BASE_URL + currentPlayerBee.role.toLowerCase() + "Neutral.jpg";
-                modelBeeImage.src = IMAGE_BASE_URL + "other" + currentModelBee.role.toLowerCase() + "Neutral.jpg";
+                playerBeeImage.src = IMAGE_BASE_URL + currentPlayerBee.role.toLowerCase() + "Neutral.png";
+                modelBeeImage.src = IMAGE_BASE_URL + "other" + currentModelBee.role.toLowerCase() + "Neutral.png";
                 playerResultTextField.textContent = "";
                 modelResultTextField.textContent = "";
 
