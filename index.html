@@ -438,12 +438,12 @@
             let title = `Your life as a ${currentBee.name.toLowerCase()} has ended.`;
             let summary = currentBee.lastEventResult;
             // Default to .jpeg for end, .png for survived, based on original Java naming pattern
-            let beeImageFile = `${currentBee.role.toLowerCase()}End.jpeg`; 
+            let beeImageFile = `${currentBee.role.toLowerCase()}beeEnd.jpeg`; 
 
             if (!summary.toLowerCase().includes("game over") && currentBee.hasReachedLifespan()) {
                 title = `Congratulations ${currentBee.name.toLowerCase()}, you adapted and survived!`;
                 summary = `This ${currentBee.name.toLowerCase()} has successfully completed its journey after ${currentBee.getEventCount()} events and left a buzzing legacy!`;
-                beeImageFile = `${currentBee.role.toLowerCase()}Survived.png`; 
+                beeImageFile = `${currentBee.role.toLowerCase()}beeSurvived.png`; 
             } else if (!summary) { 
                  summary = "The bee's journey has ended unexpectedly. Learn from your mistakes and try again!";
             }
