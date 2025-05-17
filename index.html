@@ -333,8 +333,8 @@
             currentPlayerBee.eventCount = 0;
             currentModelBee.eventCount = 0;
             eventTracker.textContent = `Event: ${currentPlayerBee.getEventCount() + 1} / ${MAX_EVENTS}`;
-            playerBeeImage.src = IMAGE_BASE_URL + currentPlayerBee.role.toLowerCase() + "Neutral.jpg";
-            modelBeeImage.src = IMAGE_BASE_URL + "other" + currentModelBee.role.toLowerCase() + "Neutral.jpg";
+            playerBeeImage.src = IMAGE_BASE_URL + currentPlayerBee.role.toLowerCase() + "Neutral.png";
+            modelBeeImage.src = IMAGE_BASE_URL + "other" + currentModelBee.role.toLowerCase() + "Neutral.png";
             eventTextField.textContent = `Welcome to the hive, ${currentPlayerBee.name}!\nObserve other bees and learn from their choices to survive.\nClick "Let's Bee-gin!" to see your first event.`;
             playerResultTextField.textContent = "";
             modelResultTextField.textContent = "";
