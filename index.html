@@ -175,7 +175,7 @@
                 this.name = BEE_CONSTANTS[role.toUpperCase()].NAME;
                 this.eventCount = 0;
                 this.lastEventResult = "";
-                this.currentImageFile = `${this.role.toLowerCase()}Neutral.jpg`; // Initial neutral image
+                this.currentImageFile = `${this.role.toLowerCase()}Neutral.png`; // Initial neutral image
             }
             incrementEventCount() { this.eventCount++; }
             getEventCount() { return this.eventCount; }
@@ -189,10 +189,10 @@
                 const prefix = isModel ? "other" : "";
 
                 // Define image extensions based on your provided files
-                const neutralImg = `${prefix}${beeTypeLower}Neutral.jpg`;
-                const sadImg = `${prefix}${beeTypeLower}Sad.jpg`;
-                const deadImg = `${prefix}${beeTypeLower}Dead.jpg`;
-                const happyImg = `${prefix}${beeTypeLower}Happy.jpg`; // For model happy states
+                const neutralImg = `${prefix}${beeTypeLower}Neutral.png`;
+                const sadImg = `${prefix}${beeTypeLower}Sad.png`;
+                const deadImg = `${prefix}${beeTypeLower}Dead.png`;
+                const happyImg = `${prefix}${beeTypeLower}Happy.png`; // For model happy states
                 const playerHappySurvivedImg = `${beeTypeLower}Happy.png`; // Player specific survival on end screen
 
                 // Death conditions based on specific phrases in resultText
