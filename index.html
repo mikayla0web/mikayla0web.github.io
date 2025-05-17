@@ -39,42 +39,28 @@
             white-space: pre-line;
             text-align: left; /* Align text left in info boxes */
         }
-        .main-image-layout { /* This class seems unused in the new layout, but kept for reference */
-            width: 100%;
-            height: auto;
-            min-height: 200px;
-            max-height: 350px;
-            border-radius: 0.5rem;
-            object-fit: contain;
-        }
-        @media (min-width: 768px) { /* md breakpoint */
-            .main-image-layout { /* This class seems unused */
-                min-height: 300px;
-            }
-        }
-         .start-screen-logo {
-            width: 200px; /* Increased size */
-            height: 200px; /* Increased size */
+        .start-screen-logo {
+            width: 200px;
+            height: 200px;
             object-fit: contain;
             border-radius: 0.5rem;
             margin-bottom: 1.5rem;
          }
-         .end-screen-image { /* Styles for the image on the end screen */
+         .end-screen-image {
             width: 100%;
-            max-width: 250px; /* Adjusted for potentially smaller end images */
-            max-height: 250px; /* Ensure it's not overly large */
+            max-width: 250px;
+            max-height: 250px;
             border-radius: 0.5rem;
             margin: 1rem auto;
             object-fit: contain;
         }
-        /* Styles for bee images on the game screen */
         .game-bee-image {
             width: 100%;
-            height: auto; /* Maintain aspect ratio */
-            max-height: 240px; /* Max height for game screen bee images (60 * 4 = 240) */
+            height: auto;
+            max-height: 240px;
             object-fit: contain;
-            border-radius: 0.5rem; /* from .main-image-layout */
-            margin-bottom: 0.75rem; /* from player-bee-image */
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
         }
     </style>
 </head>
@@ -91,7 +77,7 @@
             <div class="flex flex-col sm:flex-row justify-center">
                 <button id="drone-bee-button" class="button">Drone Bee</button>
                 <button id="worker-bee-button" class="button">Worker Bee</button>
-                </div>
+            </div>
         </div>
     </div>
 
@@ -100,38 +86,31 @@
             <div class="text-right mb-4">
                 <p id="event-tracker" class="text-xl font-semibold text-yellow-700">Event: 1 / 7</p>
             </div>
-
             <div class="flex flex-col md:flex-row gap-6 mb-4 items-start">
                 <div class="flex-1 bg-white p-4 rounded-lg shadow-md">
                     <h2 class="text-2xl font-bold text-center text-yellow-700 mb-3">Your Bee</h2>
-                    <img id="player-bee-image" src="" alt="Player Bee"
-                         class="game-bee-image">
+                    <img id="player-bee-image" src="" alt="Player Bee" class="game-bee-image">
                     <div id="player-bee-result-box" class="info-box bg-blue-50 border-blue-200 min-h-[6em]">
                         <h3 class="text-lg font-semibold text-blue-700 mb-1">Your Result:</h3>
                         <p id="player-result-text-field" class="text-blue-800"></p>
                     </div>
                 </div>
-
                 <div class="flex-1 bg-white p-4 rounded-lg shadow-md">
                     <h2 class="text-2xl font-bold text-center text-gray-700 mb-3">Another Bee</h2>
-                    <img id="model-bee-image" src="" alt="Model Bee"
-                         class="game-bee-image">
+                    <img id="model-bee-image" src="" alt="Model Bee" class="game-bee-image">
                     <div id="model-bee-result-box" class="info-box bg-gray-100 border-gray-300 min-h-[6em]">
                         <h3 class="text-lg font-semibold text-gray-700 mb-1">Other Bee's Result:</h3>
                         <p id="model-result-text-field" class="text-gray-800"></p>
                     </div>
                 </div>
             </div>
-
             <div class="info-box bg-yellow-50 border-yellow-200 mb-4 p-6">
                 <h2 class="text-xl font-semibold text-yellow-700 mb-2 text-center">Current Event:</h2>
                 <p id="event-text-field" class="text-yellow-800 text-lg text-center min-h-[3em]"></p>
             </div>
-
             <div id="observation-message-area" class="text-center mb-4 min-h-[2em]">
                  <p id="observation-message-text" class="text-lg italic text-purple-700"></p>
             </div>
-
             <div class="mt-2 text-center">
                 <button id="action-button" class="button bg-orange-500 hover:bg-orange-600 border-orange-600 text-white">Let's Bee-gin!</button>
                 <button id="yes-button" class="button bg-green-500 hover:bg-green-600 border-green-600 text-white" style="display: none;">YES, I'll do it!</button>
@@ -158,11 +137,9 @@
         const startScreen = document.getElementById('start-screen');
         const gameScreen = document.getElementById('game-screen');
         const endScreen = document.getElementById('end-screen');
-
         const startScreenLogoImg = document.getElementById('start-screen-logo-img');
         const droneBeeButton = document.getElementById('drone-bee-button');
         const workerBeeButton = document.getElementById('worker-bee-button');
-
         const eventTracker = document.getElementById('event-tracker');
         const playerBeeImage = document.getElementById('player-bee-image');
         const modelBeeImage = document.getElementById('model-bee-image');
@@ -173,7 +150,6 @@
         const actionButton = document.getElementById('action-button');
         const yesButton = document.getElementById('yes-button');
         const noButton = document.getElementById('no-button');
-
         const endScreenBeeImage = document.getElementById('end-screen-bee-image');
         const endTitleTextField = document.getElementById('end-title-text-field');
         const endSummaryTextArea = document.getElementById('end-summary-text-area');
@@ -183,87 +159,91 @@
         let currentPlayerBee = null;
         let currentModelBee = null;
         let currentEventText = '';
-        let eventHandledForPlayer = true;
-        let observingModel = false;
+        let eventHandledForPlayer = true; // True initially, and after player makes a choice
+        let observingModel = false; // True when waiting for model bee's action
         const MAX_EVENTS = 7;
+        const IMAGE_BASE_URL = "https://mikayla0web.github.io/images/";
 
-        // --- Image Base URL ---
-        const IMAGE_BASE_URL = "https://mikayla0web.github.io/images/"; // VERIFY THIS!
-
-        // --- Constants ---
         const BEE_CONSTANTS = {
             DRONE: { NAME: "Drone Bee", ROLE: "drone" },
             WORKER: { NAME: "Worker Bee", ROLE: "worker" },
         };
 
-        // --- Bee Classes ---
         class Bee {
             constructor(role) {
                 this.role = role;
                 this.name = BEE_CONSTANTS[role.toUpperCase()].NAME;
                 this.eventCount = 0;
                 this.lastEventResult = "";
-                this.currentImageFile = `${this.role.toLowerCase()}Neutral.png`;
+                this.currentImageFile = `${this.role.toLowerCase()}Neutral.jpg`; // Initial neutral image
             }
             incrementEventCount() { this.eventCount++; }
             getEventCount() { return this.eventCount; }
             hasReachedLifespan() { return this.eventCount >= MAX_EVENTS; }
-            getType() { return this.role; }
             setLastEventResult(result) { this.lastEventResult = result; }
 
             getImageForResult(eventText, resultText, isModel = false) {
                 const resultLower = resultText.toLowerCase();
-                const eventLower = eventText.toLowerCase();
-                const beeType = this.role.toLowerCase();
+                const eventLower = eventText.toLowerCase(); // Ensure eventText is passed and used
+                const beeTypeLower = this.role.toLowerCase();
                 const prefix = isModel ? "other" : "";
 
-                // Death conditions
-                if (resultLower.startsWith("game over") || resultLower.includes("its journey ended: game over") ||
-                    (eventLower.includes("pretty flower") && resultLower.includes("attacked by a fly swatter")) ||
-                    (eventLower.includes("bear paw") && resultLower.includes("stung the bear")) ||
-                    (eventLower.includes("cloudy") && resultLower.includes("large raindrop hit")) ||
-                    (eventLower.includes("nectar") && type === "drone" && resultLower.includes("publicly executed")) ||
-                    (eventLower.includes("offer the queen a snack") && resultLower.includes("buried alive")) ||
-                    (eventLower.includes("explore the outdoors") && resultLower.includes("run over by a tricycle")) ||
-                    (eventLower.includes("wink at her") && resultLower.includes("queen has you executed")) ||
-                    (eventLower.includes("surrounding the drone room") && resultLower.includes("annual winter eviction")) ||
-                    (eventLower.includes("pollen all over the floor") && !userChoice && type === "drone" && resultLower.includes("executed the drone for not being a productive"))) { // Specific drone NO choice death
-                    return `${prefix}${beeType}Dead.png`;
+                // Define image extensions based on your provided files
+                const neutralImg = `${prefix}${beeTypeLower}Neutral.jpg`;
+                const sadImg = `${prefix}${beeTypeLower}Sad.jpg`;
+                const deadImg = `${prefix}${beeTypeLower}Dead.jpg`;
+                const happyImg = `${prefix}${beeTypeLower}Happy.jpg`; // For model happy states
+                const playerHappySurvivedImg = `${beeTypeLower}Happy.png`; // Player specific survival on end screen
+
+                // Death conditions based on specific phrases in resultText
+                const deathTriggers = [
+                    "game over!", "attacked by a fly swatter", "stung the bear", "stinger was ripped out",
+                    "large raindrop hit", "publicly executed for treason", "buried alive in honey",
+                    "run over by a tricycle", "queen has you executed", "queen was insulted",
+                    "annual winter eviction", "executed the drone for not being a productive"
+                ];
+                for (const trigger of deathTriggers) {
+                    if (resultLower.includes(trigger)) return deadImg;
                 }
 
-                // Happy conditions (Survived this event positively)
-                if (resultLower.includes("worth the risk") || resultLower.includes("extra ration of food") ||
-                    resultLower.includes("salutes the drone for its loyalty") || resultLower.includes("thankful for the help") ||
-                    resultLower.includes("good timing!")) {
-                    return `${prefix}${beeType}Happy.png`; 
+                // Flower Event Specific Logic: If NO, and alive, then Sad.
+                if (eventLower.includes("pretty flower in the window") && resultLower.includes("wisely stayed away")) {
+                    return sadImg;
                 }
 
-                // Sad/Neutral conditions (Survived, but not explicitly happy or died)
-                // Specific for flower event NO choice (survived)
-                if (eventLower.includes("pretty flower") && resultLower.includes("wisely stayed away")) {
-                     return `${prefix}${beeType}Sad.png`; // Or Neutral
+                // Happy Triggers
+                const happyTriggers = [
+                    "totally worth the risk", "nectar was delicious", "extra ration of food",
+                    "salutes the drone for its loyalty", "thankful for the help", "good timing!",
+                    "stayed hidden and found some stashed jellies"
+                ];
+                for (const trigger of happyTriggers) {
+                    if (resultLower.includes(trigger)) {
+                        // For end screen survival, player uses .png
+                        return (isModel) ? happyImg : playerHappySurvivedImg;
+                    }
                 }
-                if (resultLower.includes("maybe another time") || resultLower.includes("missed the meeting") ||
-                    resultLower.includes("some brave bees were lost") || resultLower.includes("good choice!") ||
-                    resultLower.includes("fed the hungry larvae") || resultLower.includes("drones were evicted") ||
-                    resultLower.includes("self-control might have saved") || resultLower.includes("best never to bother") ||
-                    resultLower.includes("decided to relax today") || resultLower.includes("stayed inside the hive") ||
-                    resultLower.includes("good thing the drone didn't respond")) {
-                    return `${prefix}${beeType}Sad.png`;
+                // Sad Triggers (Survived, but neutral or slightly negative outcome)
+                const sadTriggers = [
+                    "resisted temptation", "maybe another time", "missed the meeting",
+                    "some brave bees were lost", "good choice!", "fed the hungry larvae",
+                    "drones were evicted", "tough but necessary", "self-control might have saved",
+                    "best never to bother", "decided to relax today", "stayed inside the hive",
+                    "good thing this drone didn't respond", "couldn't bring itself to do it",
+                    "food became even scarcer"
+                ];
+                 for (const trigger of sadTriggers) {
+                    if (resultLower.includes(trigger)) {
+                        return sadImg;
+                    }
                 }
-                return `${prefix}${beeType}Neutral.png`; // Fallback
+                return neutralImg; // Fallback
             }
         }
 
-        class DroneBee extends Bee {
-            constructor() { super(BEE_CONSTANTS.DRONE.ROLE); }
-        }
+        class DroneBee extends Bee { constructor() { super(BEE_CONSTANTS.DRONE.ROLE); } }
+        class WorkerBee extends Bee { constructor() { super(BEE_CONSTANTS.WORKER.ROLE); } }
 
-        class WorkerBee extends Bee {
-            constructor() { super(BEE_CONSTANTS.WORKER.ROLE); }
-        }
-
-        // --- Actions and Events Logic ---
         const actionsAndEventsLogic = {
             eventCollections: {
                 worker: [
@@ -286,43 +266,24 @@
                 ]
             },
             availableEvents: {},
-            _shuffleArray(array) { /* ... (same as before) ... */
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-            },
-            initAvailableEvents() { /* ... (same as before) ... */
-                this.availableEvents = {};
-                for (const beeType in this.eventCollections) {
-                    this.availableEvents[beeType] = [...this.eventCollections[beeType]];
-                    this._shuffleArray(this.availableEvents[beeType]);
-                }
-            },
-            generateEvent(beeType) { /* ... (same as before) ... */
-                const type = beeType.toLowerCase();
-                if (!this.availableEvents[type] || this.availableEvents[type].length === 0) {
-                    this.availableEvents[type] = [...this.eventCollections[type]];
-                    this._shuffleArray(this.availableEvents[type]);
-                    if (this.availableEvents[type].length === 0) return "The hive is quiet. No new events for now.";
-                }
-                return this.availableEvents[type].shift();
-            },
+            _shuffleArray(array) {for (let i = array.length - 1; i > 0; i--) {const j = Math.floor(Math.random() * (i + 1));[array[i], array[j]] = [array[j], array[i]];}},
+            initAvailableEvents() {this.availableEvents = {};for (const beeType in this.eventCollections) {this.availableEvents[beeType] = [...this.eventCollections[beeType]];this._shuffleArray(this.availableEvents[beeType]);}},
+            generateEvent(beeType) {const type = beeType.toLowerCase();if (!this.availableEvents[type] || this.availableEvents[type].length === 0) {this.availableEvents[type] = [...this.eventCollections[type]];this._shuffleArray(this.availableEvents[type]);if (this.availableEvents[type].length === 0) return "The hive is quiet. No new events for now.";}return this.availableEvents[type].shift();},
             handleEvent(beeRole, userChoice, eventText) {
                 const type = beeRole.toLowerCase();
                 switch (type) {
                     case "worker":
                         switch (eventText) {
                             case "There is a pretty flower in the window, would you like to get a closer look?":
-                                return userChoice ? "Game over. Attacked by a fly swatter after approaching the plastic flower!" : "Wisely stayed away. (Another curious bee got smooshed!)";
+                                return userChoice ? "Game over! The bee went for the flower and got swatted!" : "Wisely stayed away from the suspicious flower. (Another bee that went closer met a swift end!)";
                             case "The nectar looks very tempting, would you like to sneak a little taste?":
                                 return userChoice ? "Totally worth the risk. The nectar was delicious!" : "Resisted temptation. Maybe another time.";
                             case "The queen has requested all worker bees to the royal room, would you like to attend?":
                                 return userChoice ? "The Queen noticed this bee's diligence and gave an extra ration of food!" : "Missed the meeting and a chance for extra food.";
                             case "A bear paw is attacking the hive! Would you like to attack?":
-                                return userChoice ? "Game over. Stung the bear, helping save the hive, but its stinger was ripped out." : "The bear was eventually fought off, but some brave bees were lost.";
+                                return userChoice ? "Game over! Stung the bear, helping save the hive, but its stinger was ripped out." : "The bear was eventually fought off, but some brave bees were lost.";
                             case "The sky is looking a bit cloudy... do you still want to go to work?":
-                                return userChoice ? "Game over. A large raindrop hit the bee mid-flight!" : "Good choice! A heavy rain started, and some bees out working didn't make it back.";
+                                return userChoice ? "Game over! A large raindrop hit the bee mid-flight!" : "Good choice! A heavy rain started, and some bees out working didn't make it back.";
                             case "The larvae are looking a little hungry, would you like to feed them royal jelly?":
                                 return userChoice ? "Fed the hungry larvae. They seemed to appreciate it." : "Decided not to feed the larvae. Hopefully, someone else will.";
                             case "Winter is approaching and food is scarce, would you like to kick the drones out of the hive?":
@@ -332,19 +293,19 @@
                     case "drone":
                         switch (eventText) {
                             case "The nectar looks very tempting, would you like to sneak a little taste?":
-                                return userChoice ? "Game over. Caught by guards and publicly executed for treason!" : "This drone's self-control might have saved its life.";
+                                return userChoice ? "Game over! Caught by guards and publicly executed for treason!" : "This drone's self-control might have saved its life.";
                             case "The queen has been working very hard today, would you like to offer the queen a snack?":
-                                return userChoice ? "Game over. The Queen was not in the mood and had the drone buried alive in honey." : "This drone decided it's best never to bother the Queen unannounced.";
+                                return userChoice ? "Game over! The Queen was not in the mood and had the drone buried alive in honey." : "This drone decided it's best never to bother the Queen unannounced.";
                             case "The queen is only mating with five drones today, would you like to volunteer?":
                                 return userChoice ? "The hive salutes the drone for its loyalty and contribution." : "This drone decided to relax today. Mating can wait.";
                             case "The queen declared no work today, would you like to explore the outdoors?":
-                                return userChoice ? "Game over. The drone only lasted 3 minutes in the wild before getting run over by a tricycle." : "This drone stayed inside the hive where it's safe and sound.";
+                                return userChoice ? "Game over! The drone only lasted 3 minutes in the wild before getting run over by a tricycle." : "This drone stayed inside the hive where it's safe and sound.";
                             case "The queen seems to be checking you out from across the room, would you like to wink at her?":
-                                return userChoice ? "Game over. The Queen was insulted by the disrespect and had the drone executed." : "Good thing this drone didn't respond; the Queen was actually looking at the bee behind it.";
+                                return userChoice ? "Game over! The Queen was insulted by the disrespect and had the drone executed." : "Good thing this drone didn't respond; the Queen was actually looking at the bee behind it.";
                             case "The worker bees seem to be surrounding the drone room, would you like to sneak out for a minute?":
-                                return userChoice ? "Good timing! It seems the other drones were evicted due to limited food. This drone stayed hidden and found some stashed jellies." : "Game over. It was the annual winter eviction. The drone will be missed.";
+                                return userChoice ? "Good timing! It seems the other drones were evicted due to limited food. This drone stayed hidden and found some stashed jellies." : "Game over! It was the annual winter eviction. The drone will be missed.";
                             case "The worker bees left pollen all over the floor! Would you like to sweep it up?":
-                                return userChoice ? "The worker bees returned and were surprised but thankful for the help." : "Game over. The hive executed the drone for not being a productive member of society.";
+                                return userChoice ? "The worker bees returned and were surprised but thankful for the help." : "Game over! The hive executed the drone for not being a productive member of society.";
                             default: return "An unexpected turn of events for the drone bee.";
                         }
                     default: return "Unknown Bee Type for event handling.";
@@ -352,15 +313,8 @@
             }
         };
 
-        // --- Screen Management ---
-        function showScreen(screenId) { /* ... (same as before) ... */
-            startScreen.classList.remove('active-screen');
-            gameScreen.classList.remove('active-screen');
-            endScreen.classList.remove('active-screen');
-            document.getElementById(screenId).classList.add('active-screen');
-        }
+        function showScreen(screenId) { startScreen.classList.remove('active-screen'); gameScreen.classList.remove('active-screen'); endScreen.classList.remove('active-screen'); document.getElementById(screenId).classList.add('active-screen'); }
 
-        // --- Image Update Logic ---
         function updateBeeImageDisplay(beeInstance, imageElement, eventTextForContext, resultText, isModel = false) {
             const imageName = beeInstance.getImageForResult(eventTextForContext, resultText, isModel);
             imageElement.src = IMAGE_BASE_URL + imageName;
@@ -368,34 +322,29 @@
             beeInstance.currentImageFile = imageName;
         }
 
-
-        // --- Game Flow Functions ---
         function selectBeeType(beeConstructor) {
             currentPlayerBee = new beeConstructor();
-            currentModelBee = new beeConstructor(); // Model is the same type
+            currentModelBee = new beeConstructor();
             actionsAndEventsLogic.initAvailableEvents();
             displayGameScreenAndInitialSetup();
         }
 
         function displayGameScreenAndInitialSetup() {
-            currentPlayerBee.eventCount = 0; // Reset event count for new game
+            currentPlayerBee.eventCount = 0;
             currentModelBee.eventCount = 0;
             eventTracker.textContent = `Event: ${currentPlayerBee.getEventCount() + 1} / ${MAX_EVENTS}`;
-            playerBeeImage.src = IMAGE_BASE_URL + currentPlayerBee.role.toLowerCase() + "Neutral.png"; // Use .jpg for neutral
-            modelBeeImage.src = IMAGE_BASE_URL + "other" + currentModelBee.role.toLowerCase() + "Neutral.png";
-
+            playerBeeImage.src = IMAGE_BASE_URL + currentPlayerBee.role.toLowerCase() + "Neutral.jpg";
+            modelBeeImage.src = IMAGE_BASE_URL + "other" + currentModelBee.role.toLowerCase() + "Neutral.jpg";
             eventTextField.textContent = `Welcome to the hive, ${currentPlayerBee.name}!\nObserve other bees and learn from their choices to survive.\nClick "Let's Bee-gin!" to see your first event.`;
             playerResultTextField.textContent = "";
             modelResultTextField.textContent = "";
             observationMessageText.textContent = "";
-
             actionButton.textContent = "Let's Bee-gin!";
             actionButton.style.display = 'inline-block';
             yesButton.style.display = 'none';
             noButton.style.display = 'none';
             yesButton.disabled = true;
             noButton.disabled = true;
-
             eventHandledForPlayer = true;
             observingModel = false;
             showScreen('game-screen');
@@ -403,48 +352,49 @@
 
         function handleActionClick() {
             if (!currentPlayerBee || !currentModelBee) return;
-
             if (eventHandledForPlayer) {
                 if (currentPlayerBee.getEventCount() >= MAX_EVENTS) {
-                    displayEndScreen(); // Should have ended already, but as a safeguard
-                    return;
+                    displayEndScreen(); return;
                 }
                 currentPlayerBee.incrementEventCount();
-                currentModelBee.incrementEventCount(); // Model experiences events in sync for count
-                eventTracker.textContent = `Event: ${currentPlayerBee.getEventCount()} / ${MAX_EVENTS}`;
+                // Model bee also "experiences" this event turn for its internal logic if needed,
+                // but its eventCount for display/lifespan isn't tied to player's direct action here.
+                // Let's assume modelBee eventCount also increments to keep them somewhat in sync for simplicity of MAX_EVENTS
+                currentModelBee.incrementEventCount();
 
+                eventTracker.textContent = `Event: ${currentPlayerBee.getEventCount()} / ${MAX_EVENTS}`;
                 currentEventText = actionsAndEventsLogic.generateEvent(currentPlayerBee.role);
                 eventTextField.textContent = currentEventText;
 
-                playerBeeImage.src = IMAGE_BASE_URL + currentPlayerBee.role.toLowerCase() + "Neutral.png";
-                modelBeeImage.src = IMAGE_BASE_URL + "other" + currentModelBee.role.toLowerCase() + "Neutral.png";
+                // Reset images to neutral for the new event
+                updateBeeImageDisplay(currentPlayerBee, playerBeeImage, currentEventText, "Neutral state", false);
+                updateBeeImageDisplay(currentModelBee, modelBeeImage, currentEventText, "Neutral state", true);
+
                 playerResultTextField.textContent = "";
                 modelResultTextField.textContent = "";
-
                 actionButton.style.display = 'none';
                 yesButton.style.display = 'inline-block';
-                yesButton.disabled = true;
+                yesButton.disabled = true; // Critical: Disable until model action
                 noButton.style.display = 'inline-block';
-                noButton.disabled = true;
-
+                noButton.disabled = true; // Critical: Disable until model action
                 observationMessageText.textContent = "Let's see what the other bee does...";
-                observingModel = true;
-                eventHandledForPlayer = false;
+                observingModel = true; // Player is now waiting for model
+                eventHandledForPlayer = false; // Player has not handled this event yet
                 setTimeout(simulateModelAction, 1500);
             }
         }
 
         function simulateModelAction() {
-            if (!currentModelBee || !observingModel) return;
+            if (!currentModelBee || !observingModel) return; // Only proceed if we are in observation mode
 
             const modelChoice = Math.random() < 0.5;
             const modelRawResult = actionsAndEventsLogic.handleEvent(currentModelBee.role, modelChoice, currentEventText);
 
             let displayModelResultText = `The other ${currentModelBee.name.toLowerCase()} chose ${modelChoice ? 'YES' : 'NO'}. `;
-            if (modelRawResult.toLowerCase().startsWith("game over.")) {
+            if (modelRawResult.toLowerCase().startsWith("game over!")) {
                 displayModelResultText += `Its journey ended: ${modelRawResult.substring(10).trim()}`;
             } else {
-                displayModelResultText += modelRawResult.replace(/^The bee /i, 'It ');
+                displayModelResultText += modelRawResult.replace(/^the bee /i, 'It '); // More natural phrasing
             }
 
             modelResultTextField.textContent = displayModelResultText;
@@ -452,52 +402,53 @@
             currentModelBee.setLastEventResult(modelRawResult);
 
             observationMessageText.textContent = "Now, what will your bee do?";
-            yesButton.disabled = false;
-            noButton.disabled = false;
-            observingModel = false;
+            yesButton.disabled = false; // NOW enable player buttons
+            noButton.disabled = false; // NOW enable player buttons
+            observingModel = false; // Observation complete for this turn
         }
 
         function handlePlayerChoice(isYesChoice) {
-            if (!currentPlayerBee || eventHandledForPlayer || observingModel) return;
+            if (!currentPlayerBee || eventHandledForPlayer || observingModel) return; // Player cannot act if model is acting or event already handled
 
             const playerRawResult = actionsAndEventsLogic.handleEvent(currentPlayerBee.role, isYesChoice, currentEventText);
-
             let displayPlayerResultText = `Your ${currentPlayerBee.name.toLowerCase()} chose ${isYesChoice ? 'YES' : 'NO'}. ${playerRawResult}`;
 
             playerResultTextField.textContent = displayPlayerResultText;
             updateBeeImageDisplay(currentPlayerBee, playerBeeImage, currentEventText, playerRawResult, false);
             currentPlayerBee.setLastEventResult(playerRawResult);
 
-            if (currentPlayerBee.hasReachedLifespan() || playerRawResult.toLowerCase().startsWith("game over.")) {
+            eventHandledForPlayer = true; // Player has now handled the event
+
+            if (currentPlayerBee.hasReachedLifespan() || playerRawResult.toLowerCase().startsWith("game over!")) {
                 displayEndScreen();
             } else {
-                eventHandledForPlayer = true;
                 yesButton.style.display = 'none';
                 noButton.style.display = 'none';
                 actionButton.textContent = "Next Event...";
                 actionButton.style.display = 'inline-block';
-                observationMessageText.textContent = "";
+                observationMessageText.textContent = ""; // Clear observation message
             }
         }
 
         function displayEndScreen() {
             let title, summary, beeImageFile;
-            const playerResultLower = currentPlayerBee.lastEventResult.toLowerCase();
+            const playerLastResult = currentPlayerBee.lastEventResult;
+            const playerResultLower = playerLastResult.toLowerCase();
 
-            if (!playerResultLower.startsWith("game over.") && currentPlayerBee.hasReachedLifespan()) {
+            if (!playerResultLower.startsWith("game over!") && currentPlayerBee.hasReachedLifespan()) {
                 title = `Congratulations! Your ${currentPlayerBee.name.toLowerCase()} adapted and survived!`;
-                summary = `Your ${currentPlayerBee.name.toLowerCase()} successfully completed all ${currentPlayerBee.getEventCount()} events and left a buzzing legacy! You learned well by observing others.`;
-                beeImageFile = `${currentPlayerBee.role.toLowerCase()}Happy.png`; // SURVIVED/HAPPY IMAGE
+                summary = `Your ${currentPlayerBee.name.toLowerCase()} successfully completed all ${MAX_EVENTS} events and left a buzzing legacy! You learned well by observing others.`;
+                beeImageFile = `${currentPlayerBee.role.toLowerCase()}Happy.png`;
             } else {
                 title = `Your ${currentPlayerBee.name.toLowerCase()}'s journey has ended.`;
-                summary = playerRawResult = currentPlayerBee.lastEventResult;
-                if (!playerResultLower.startsWith("game over.")){ // if it didn't explicitly say game over but lifespan wasn't met
-                    summary = "Game over. " + summary;
+                summary = playerLastResult;
+                if (!playerResultLower.startsWith("game over!")){
+                    summary = "Game over! " + summary;
                 }
                 summary += "\nLearn from your mistakes (and what you observed!) and try again!";
-                beeImageFile = currentPlayerBee.getImageForResult(currentEventText, currentPlayerBee.lastEventResult, false); // Get final dead/sad image
+                // Use currentEventText for context if lastEventResult is the one that ended the game
+                beeImageFile = currentPlayerBee.getImageForResult(currentEventText, playerLastResult, false);
             }
-
             endTitleTextField.textContent = title;
             endSummaryTextArea.textContent = summary;
             endScreenBeeImage.src = IMAGE_BASE_URL + beeImageFile;
@@ -505,27 +456,15 @@
             showScreen('end-screen');
         }
 
-        function restartGame() { /* ... (same as before) ... */
-            currentPlayerBee = null;
-            currentModelBee = null;
-            currentEventText = '';
-            eventHandledForPlayer = true;
-            observingModel = false;
-            startScreenLogoImg.src = IMAGE_BASE_URL + "startScreen.png";
-            showScreen('start-screen');
-        }
+        function restartGame() { currentPlayerBee = null; currentModelBee = null; currentEventText = ''; eventHandledForPlayer = true; observingModel = false; startScreenLogoImg.src = IMAGE_BASE_URL + "startScreen.png"; showScreen('start-screen'); }
 
-        // --- Event Listeners ---
         droneBeeButton.addEventListener('click', () => selectBeeType(DroneBee));
         workerBeeButton.addEventListener('click', () => selectBeeType(WorkerBee));
-
         actionButton.addEventListener('click', handleActionClick);
         yesButton.addEventListener('click', () => handlePlayerChoice(true));
         noButton.addEventListener('click', () => handlePlayerChoice(false));
-
         restartButton.addEventListener('click', restartGame);
 
-        // --- Initial Setup ---
         startScreenLogoImg.src = IMAGE_BASE_URL + "startScreen.png";
         actionsAndEventsLogic.initAvailableEvents();
         showScreen('start-screen');
